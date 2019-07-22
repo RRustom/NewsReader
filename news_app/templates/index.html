@@ -29,9 +29,14 @@
       {% for entry in entries %}
       {# TODO: add link to source rss #}
       <dt>{{ source }}</dt>
-      <dd><a href="{{ entry.link }}">{{ entry.title }}</a></dd>
+      <dd>
+        <a href="{{ entry.link }}">{{ entry.title }}</a>
+        <br>
+        <text class="small">{{ clean_summary(entry.summary) }}</text>
+      </dd>
       {% endfor %}
     {% endfor %}
+    <br>
   </dl>
 </body>
 {% endblock %}

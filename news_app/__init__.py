@@ -39,6 +39,16 @@ def create_app(test_config=None):
         nav.Item('Other', 'other')
         ])
 
+    @app.context_processor
+    def utility_processor():
+        def clean_summary(summary):
+            """
+            Cleans up the summary for each entry from HTML tags. 
+            """
+            split_list = summary.split("<div")
+            return split_list[0]
+        return dict(clean_summary=clean_summary)
+
     # Home
     @app.route('/')
     def home():

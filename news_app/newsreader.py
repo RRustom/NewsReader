@@ -37,7 +37,7 @@ class Feed:
             #TODO: AP News, AFP
             "Reuters World": "http://feeds.reuters.com/Reuters/worldNews",
             "Reuters Business": "http://feeds.reuters.com/reuters/businessNews",
-            "The New Republic": "https://www.newrepublic.com/rss.xml",
+            #"The New Republic": "https://www.newrepublic.com/rss.xml",
             "BW Venture Capital": "https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJdEVhZXw==",
             "Zawya Regional": "https://www.zawya.com/rssfeeds/regional.xml"
             }
