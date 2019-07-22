@@ -1,0 +1,38 @@
+{% extends "bootstrap/base.html" %}
+<!doctype html>
+<html lang="en">
+{% block title %}<h1>RR News Feed</h1>{% endblock %}
+
+{# navbar options: https://www.w3schools.com/bootstrap/bootstrap_ref_all_classes.asp #}
+{% block navbar %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">RR News Feed</a>
+    </div>
+    <ul class="nav navbar-nav">
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+        <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<body class="container">
+  <h2>{{ name }}</h2>
+  <dl id="News Feed" class="dl-horizontal">
+    {% for source, entries in feed.items() %}
+      {% for entry in entries %}
+      {# TODO: add link to source rss #}
+      <dt>{{ source }}</dt>
+      <dd><a href="{{ entry.link }}">{{ entry.title }}</a></dd>
+      {% endfor %}
+    {% endfor %}
+  </dl>
+</body>
+{% endblock %}
+</html>
