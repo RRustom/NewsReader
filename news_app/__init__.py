@@ -1,10 +1,10 @@
-import os, feedparser, unidecode
+import os, feedparser, unidecode, re
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 #https://pythonhosted.org/Flask-Bootstrap/basic-usage.html
 from flask_navigation import Navigation
 
-from .newsreader import Feed
+from .newsreader import Feed, News, BehindNews, Data, Tutorials, SocialMedia
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -43,11 +43,24 @@ def create_app(test_config=None):
     def utility_processor():
         def clean_summary(summary):
             """
-            Cleans up the summary for each entry from HTML tags. 
+            Cleans up the summary for each entry from HTML tags.
             """
-            split_list = summary.split("<div")
-            return split_list[0]
-        return dict(clean_summary=clean_summary)
+            delimiters="<div", "<img"
+            regex_pattern = '|'.join(map(re.escape, delimiters))
+            split_list = re.split(regex_pattern, summary)
+
+            if len(split_list[0])<600:
+                return split_list[0]
+            else:
+                return "Summary too long. Click the link for more info"
+        def image_link(entry):
+            """
+            Get image from entry[i].links
+            """
+            for link in entry.links:
+                if "image" in link.type:
+                    return link.href
+        return dict(clean_summary=clean_summary, image_link=image_link)
 
     # Home
     @app.route('/')
@@ -62,7 +75,33 @@ def create_app(test_config=None):
     # Headline News
     @app.route('/headlines')
     def news():
-        feed = Feed()
+        """
+        Topics:
+        1. Technology
+            - Security
+            - Machine Learning + Data Analysis
+            - Systems / Software
+            - AGT
+            - Networks / Optimization
+        2. Math
+            - Probability
+            - ACT
+            - Pure Math
+        3. Geopolitics
+        4. business
+        5. VC/Silicon Valley
+        6. Payments
+        7. Finance
+        8. architecture / urban planning
+        9. cities
+        10. Sports
+        11. MENA
+        12. Developing World
+        13. Startup / Management
+        14. Construction / Real Estate
+        15. Philosophy
+        """
+        feed = News()
         entries = feed.entries()
         return render_template('index.html', name="Headline News", feed=entries)
 
@@ -73,36 +112,65 @@ def create_app(test_config=None):
     # Behind the Headlines
     @app.route('/behind')
     def behind_news():
-        feed = Feed()
+        """
+        Same topics, different sources:
+        1. Technology
+            - Security
+            - Machine Learning + Data Analysis
+            - Systems / Software
+            - AGT
+            - Networks / Optimization
+        2. Math
+            - Probability
+            - ACT
+            - Pure Math
+        3. Geopolitics
+        4. business
+        5. VC/Silicon Valley
+        6. Payments
+        7. Finance
+        8. architecture / urban planning
+        9. cities
+        10. Sports
+        11. MENA
+        12. Developing World
+        13. Startup / Management
+        14. Construction / Real Estate
+        15. Philosophy
+        16. History
+        17. Music
+        """
+        feed = BehindNews()
         entries = feed.entries()
-        return render_template('index.html', feed=entries)
+        return render_template('index.html', name="Behind the Headlines", feed=entries)
 
     # Behind the Headlines
     @app.route('/data')
     def data():
-        feed = Feed()
+        feed = Data()
         entries = feed.entries()
-        return render_template('index.html', feed=entries)
+        return render_template('index.html', name="Data", feed=entries)
 
     # Social Media
     @app.route('/social')
     def social_media():
-        feed = Feed()
+        feed = SocialMedia()
         entries = feed.entries()
-        return render_template('index.html', feed=entries)
+        #print("ENTRIES: ", entries)
+        return render_template('social.html', name="Social Media", feed=entries)
 
     # Tutorials
     @app.route('/tutorials')
     def tutorials():
-        feed = Feed()
+        feed = Tutorials()
         entries = feed.entries()
-        return render_template('index.html', feed=entries)
+        return render_template('index.html', name="Tutorials", feed=entries)
 
     # Other Media
     @app.route('/other')
     def other():
         feed = Feed()
         entries = feed.entries()
-        return render_template('index.html', feed=entries)
+        return render_template('index.html', name="Other", feed=entries)
 
     return app

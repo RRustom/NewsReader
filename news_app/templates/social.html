@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+<!doctype html>
+
+{% block scripts %}
+<script src="{{url_for('.static', filename='gallery.js')}}"></script>
+{{super()}}
+{% endblock %}
+
+{% block content %}
+<body class="container">
+  <h2>{{ name }}</h2>
+  <div class="row">
+  <div class="col-sm-12">
+    <div id="mdb-lightbox-ui"></div>
+    <div class="mdb-lightbox">
+      {% for source, entries in feed.items() %}
+        {% for entry in entries %}
+          <figure class="col-sm-6">
+            <a href="{{image_link(entry)}}" data-toggle="lightbox">
+              <img alt="picture" src="{{image_link(entry)}}" class= "img-responsive">
+            </a>
+            <h4 class="caption small"><b>{{source}}</b> {{ entry.title }}</h4>
+          </figure>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</body>
+{% endblock %}
+</html>

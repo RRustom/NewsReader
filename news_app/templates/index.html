@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 <!doctype html>
-<html lang="en">
+{% block html_attribs %} lang="en"{% endblock %}
 {% block title %}<h1>RR News Feed</h1>{% endblock %}
 
 {# navbar options: https://www.w3schools.com/bootstrap/bootstrap_ref_all_classes.asp #}
@@ -30,14 +30,15 @@
       {# TODO: add link to source rss #}
       <dt>{{ source }}</dt>
       <dd>
-        <a href="{{ entry.link }}">{{ entry.title }}</a>
-        <br>
-        <text class="small">{{ clean_summary(entry.summary) }}</text>
+          <a href="{{ entry.link }}">{{ entry.title }}</a>
+          <br>
+          <text class="small">{{ clean_summary(entry.summary) }}</text>
       </dd>
       {% endfor %}
     {% endfor %}
     <br>
   </dl>
+<script type="text/javascript" src="https://cdnjs.com/libraries/ekko-lightbox"></script>
 </body>
 {% endblock %}
 </html>
